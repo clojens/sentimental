@@ -7,7 +7,7 @@
 
 (def eng-stemmer (stemmer "english"))
 (def tokenizer (make-tokenizer "src/models/en-token.bin"))
-(def detokenizer (make-detokenizer "src/models/english-detokenizer.xml"))
+(def detokenizer (make-detokenizer "src/models/en-detokenizer.xml"))
 ; the actual categorizer
 (def categorize (make-document-categorizer tr/senti-model))
 

@@ -7,7 +7,7 @@
         [clojure.java.io]))
 
 (def tokenizer (make-tokenizer "src/models/en-token.bin"))
-(def senti-model (train-document-categorization "src/models/sentiment.train"))
+(def senti-model (train-document-categorization "src/models/en-sentiment.train"))
 
 (defn get-lines
   "Gets all lines."
