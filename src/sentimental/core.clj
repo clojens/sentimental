@@ -15,7 +15,7 @@
 (defn stop-words
   "Loads the file with English stopwords by default, optionally takes a single
   argument string from which it will try to load."
-  ([] (set (sentimental.train/get-lines "resources/en_stop_words.txt")))
+  ([] (set (sentimental.train/get-lines "resources/en-stop-words.txt")))
   ([file] (set (sentimental.train/get-lines file))))
 
 
