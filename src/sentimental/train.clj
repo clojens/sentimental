@@ -14,7 +14,7 @@
     (doall (line-seq r))))
 
 (defn temp-corpus []
-	(get-lines "resources/subjectivity_lexicon.tff"))
+	(get-lines "resources/subjectivity-lexicon.tff"))
 
 (defn create-hashmap [l]
 	(let [a (map #(string/split % #"=") l)
