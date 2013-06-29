@@ -18,15 +18,17 @@
 
 (defn create-hashmap [l]
 	(let [a (map #(string/split % #"=") l)
-        b (into {} 
-          (for [[k v] a] 
-            [(keyword k) v]))]
-        b))
+        b (into {}
+                (for [[k v] a]
+                  [(keyword k) v]))]
+    b))
 
-(defn process [s]
+(defn process
+  [s]
 	(create-hashmap (tokenizer s)))
 
-(defn corpus [] 
+(defn corpus
+  []
   (vec (map process (temp-corpus))))
 
 
@@ -34,14 +36,14 @@
 	(filter (fn [h] (= (:stemmed1 h) "y"))
 			    col))
 
-(defn by-subj 
+(defn by-subj
   "filter by subject, such as strongsubj, weaksubj"
   [col subj]
   (filter (fn [h] (= (:type h)
                      subj))
           col))
 
-(defn by-type 
+(defn by-type
   "filter by type, such as positive, negative, or neutral"
   [col type]
   (filter (fn [h] (= (:priorpolarity h)
@@ -58,19 +60,21 @@
   (with-open [wrtr (writer f :append true)]
     (.write wrtr s)))
 
-(defn append-stemmed-to-file [subj type]
-  (map  (fn [h] (append-to-file (create-train-str h)
-                                "src/models/sentiment.train"))
-        (by-type (by-subj (stemmed-only (corpus)) 
-                          subj)
-                  type)))
+(defn append-stemmed-to-file
+  [subj type]
+  (map (fn [h] (append-to-file (create-train-str h)
+                               "src/models/sentiment.train"))
+       (by-type (by-subj (stemmed-only (corpus))
+                         subj)
+                type)))
 
-(defn append-all-to-file [subj type]
+(defn append-all-to-file
+  [subj type]
   (map  (fn [h] (append-to-file (create-train-str h)
                                 "src/models/sentiment.train"))
-        (by-type (by-subj (corpus) 
+        (by-type (by-subj (corpus)
                           subj)
-                  type)))
+                 type)))
 
 ; (append-all-to-file "strongsubj" "positive")
 ; (append-all-to-file "weaksubj" "positive")
@@ -78,7 +82,3 @@
 ; (append-all-to-file "weaksubj" "negative")
 ; (append-all-to-file "strongsubj" "neutral")
 ; (append-all-to-file "weaksubj" "neutral")
-
-
-
-

@@ -19,15 +19,14 @@
 	(filter (fn [x] (not (contains? (stop-words) x)))
 			(set l)))
 
-(defn bag-of-words 
-	"Converts a string into a set of unique words/elements, 
-	each stemmed (in English)"
+(defn bag-of-words
+  "Converts a string into a set of unique words/elements,
+  each stemmed (in English)"
 	[s]
-	(set (map (fn [x] (eng-stemmer x)) 
+	(set (map (fn [x] (eng-stemmer x))
 			(strip-stop-words (tokenizer s)))))
 
-(defn compact 
-	"Takes a string, strips out stop words, and stems each word. 
-	Returns a string"
+(defn compact
+	"Takes a string, strips out stop words, and stems each word. Returns a string"
 	[s]
 	(detokenizer (bag-of-words s)))

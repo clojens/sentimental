@@ -54,4 +54,3 @@
                "strongsubj-neutral")
             (= t
                "weaksubj-neutral")))))
-
