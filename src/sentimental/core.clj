@@ -5,17 +5,22 @@
 		  	[opennlp.nlp]
 		  	[clojure.java.io]))
 
-
 (def eng-stemmer (stemmer "english"))
 (def tokenizer (make-tokenizer "src/models/en-token.bin"))
 (def detokenizer (make-detokenizer "src/models/english-detokenizer.xml"))
 ; the actual categorizer
 (def categorize (make-document-categorizer tr/senti-model))
 
-(defn stop-words []
-	(set (sentimental.train/get-lines "resources/stop_words.txt")))
 
-(defn strip-stop-words [l]
+(defn stop-words
+  "Loads the file with English stopwords by default, optionally takes a single
+  argument string from which it will try to load."
+  ([] (set (sentimental.train/get-lines "resources/en_stop_words.txt")))
+  ([file] (set (sentimental.train/get-lines file))))
+
+
+(defn strip-stop-words
+  [l]
 	(filter (fn [x] (not (contains? (stop-words) x)))
 			(set l)))
 
