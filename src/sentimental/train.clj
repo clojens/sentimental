@@ -9,14 +9,20 @@
 (def tokenizer (make-tokenizer "src/models/en-token.bin"))
 (def senti-model (train-document-categorization "src/models/sentiment.train"))
 
-(defn get-lines [fname]
+(defn get-lines
+  "Gets all lines."
+  [fname]
   (with-open [r (reader fname)]
     (doall (line-seq r))))
 
-(defn temp-corpus []
-	(get-lines "resources/subjectivity-lexicon.tff"))
+(defn temp-corpus
+  "Gets the lines from the subjectivity lexicon file."
+  []
+	(get-lines "resources/en-subjectivity-lexicon.tff"))
 
-(defn create-hashmap [l]
+(defn create-hashmap
+  "Creates a hashmap from input split on the equal sign."
+  [l]
 	(let [a (map #(string/split % #"=") l)
         b (into {}
                 (for [[k v] a]
@@ -24,54 +30,64 @@
     b))
 
 (defn process
+  "Processes the string input to create a hash-map."
   [s]
 	(create-hashmap (tokenizer s)))
 
 (defn corpus
+  "Defines the actual corpus mapped fromt the temporary one."
   []
   (vec (map process (temp-corpus))))
 
 
-(defn stemmed-only [col]
+(defn stemmed-only
+  "Only get stems from the collection."
+  [col]
 	(filter (fn [h] (= (:stemmed1 h) "y"))
 			    col))
 
 (defn by-subj
-  "filter by subject, such as strongsubj, weaksubj"
+  "Filter by subject such as strongsubj or weaksubj."
   [col subj]
   (filter (fn [h] (= (:type h)
                      subj))
           col))
 
 (defn by-type
-  "filter by type, such as positive, negative, or neutral"
+  "Filter by type such as positive, negative or neutral."
   [col type]
   (filter (fn [h] (= (:priorpolarity h)
                      type))
           col))
 
-(defn create-train-str [h]
+(defn create-train-str
+  "Create a training string."
+  [h]
   (let [type (:type h)
         pp  (:priorpolarity h)
         word (:word1 h)]
         (str (name type) "-" pp " " word "\n")))
 
-(defn append-to-file [s f]
+(defn append-to-file
+  "Append string to file."
+  [s f]
   (with-open [wrtr (writer f :append true)]
     (.write wrtr s)))
 
 (defn append-stemmed-to-file
+  "Append stemmed strings to file."
   [subj type]
   (map (fn [h] (append-to-file (create-train-str h)
-                               "src/models/sentiment.train"))
+                               "src/models/en-sentiment.train"))
        (by-type (by-subj (stemmed-only (corpus))
                          subj)
                 type)))
 
 (defn append-all-to-file
+  "Appends everything to file."
   [subj type]
   (map  (fn [h] (append-to-file (create-train-str h)
-                                "src/models/sentiment.train"))
+                                "src/models/en-sentiment.train"))
         (by-type (by-subj (corpus)
                           subj)
                  type)))
