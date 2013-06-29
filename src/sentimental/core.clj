@@ -20,6 +20,7 @@
 
 
 (defn strip-stop-words
+  "Strips an input of any stop words present."
   [l]
 	(filter (fn [x] (not (contains? (stop-words) x)))
 			(set l)))
