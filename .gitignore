@@ -1,9 +1,8 @@
-/pom.xml
+pom.xml
+resources/models/opennlp/en*
 *jar
-/lib
-/classes
-/native
-/.lein-failures
-/checkouts
-/.lein-deps-sum
-.lein
+lib/
+classes/
+native/
+checkouts/
+.lein-*
